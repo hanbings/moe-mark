@@ -43,3 +43,46 @@ footer a:hover {
     align-items: center;
 }
 
+.button-box {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 60px;
+    justify-content: center;            
+    align-items: center;
+}
+
+.picture-box {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 210px;
+    justify-content: center;            
+    align-items: center;
+}
+
+.picture {
+    display: flex;
+    flex-direction: row;
+    width: 280px;
+    height: 210px;
+    justify-content: center;            
+    align-items: center;
+}
+
+.text-input-box {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    height: 150px;
+    margin-top: -8px;
+    justify-content: center;            
+    align-items: center;
+    background-color: white;
+}
+
+.glassmorphism {
+	backdrop-filter: blur(5px);
+	box-shadow: 0 8px 12px rgba(255,255,255,.3);
+    background: rgba(255,255,255,.5);
+}
