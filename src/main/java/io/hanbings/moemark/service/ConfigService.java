@@ -45,7 +45,7 @@ public class ConfigService {
                         .readAllBytes());
                 outputStream.flush();
                 outputStream.close();
-                LoggerService.warn("Created config. The Server will stop. use server.properties config it.");
+                LoggerService.error("Created config. The Server will stop. use server.properties config it.");
                 // 此时应该先退出应用以填写配置文件
                 System.exit(0);
             } catch (IOException e) {

@@ -20,8 +20,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ThreadService {
+public class ThreadService implements Runnable{
     ThreadPoolExecutor threadPool;
+    int corePoolSize;
+    int maximumPoolSize;
+    long keepAliveTime;
+    TimeUnit unit;
+    BlockingQueue<java.lang.Runnable> queue;
 
     private ThreadService() {}
 
@@ -44,10 +49,16 @@ public class ThreadService {
      * @param unit            线程池维护线程所允许的空闲时间的单位
      * @param queue           线程池所使用的缓冲队列
      */
-    public ThreadService(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
-                         BlockingQueue<Runnable> queue) {
-        this.threadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-                keepAliveTime, unit, queue);
+    public ThreadService(int corePoolSize,
+                         int maximumPoolSize,
+                         long keepAliveTime,
+                         TimeUnit unit,
+                         BlockingQueue<java.lang.Runnable> queue) {
+        this.corePoolSize = corePoolSize;
+        this.maximumPoolSize = maximumPoolSize;
+        this.keepAliveTime = keepAliveTime;
+        this.unit = unit;
+        this.queue = queue;
     }
 
     /**
@@ -68,7 +79,14 @@ public class ThreadService {
         this.threadPool.execute(thread);
     }
 
-    public void shutdown() {
+    @Override
+    public void run() {
+        this.threadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,
+                unit, queue);
+    }
+
+    @Override
+    public void stop() {
         this.threadPool.shutdown();
     }
 }

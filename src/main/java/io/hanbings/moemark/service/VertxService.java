@@ -22,12 +22,14 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 
+import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.Set;
 
-public class VertxService {
+public class VertxService implements Runnable{
     Vertx vertx;
     HttpServer server;
     Router router;
@@ -37,6 +39,7 @@ public class VertxService {
 
     private VertxService() {}
 
+    @SuppressWarnings("SpellCheckingInspection")
     public VertxService(int port) {
         // 初始化 VertX
         this.vertx = Vertx.vertx();
@@ -59,30 +62,31 @@ public class VertxService {
         allowedHeaders.add("X-PINGARUNER");
         allowedMethods.add(HttpMethod.GET);
         allowedMethods.add(HttpMethod.POST);
-        allowedMethods.add(HttpMethod.OPTIONS);
-        allowedMethods.add(HttpMethod.DELETE);
-        allowedMethods.add(HttpMethod.PATCH);
-        allowedMethods.add(HttpMethod.PUT);
         // 设置默认为允许所有域
         router.route().handler(CorsHandler.create("*").allowedHeaders(allowedHeaders).allowedMethods(allowedMethods));
     }
 
-    public void runServer() {
+    @Override
+    public void run() {
         // 绑定端口
         server.listen(this.port);
     }
 
-    public void stopServer() {
+    @Override
+    public void stop() {
         server.close();
     }
 
-    public void addRoute(HttpMethod method, String path, Handler<RoutingContext> handler) {
+    public void addSimpleRoute(HttpMethod method, String path, Handler<RoutingContext> handler) {
         this.router.route(method, path).handler(handler);
+    }
+
+    public void addFileUploadRoute(HttpMethod method, String path, Handler<RoutingContext> handler) {
+        this.router.route(method, path).handler(BodyHandler.create().setUploadsDirectory("temp").setDeleteUploadedFilesOnEnd(true)).handler(handler);
     }
 
     public void delRoute(String path) {
         this.router.delete(path);
     }
-
 }
 
