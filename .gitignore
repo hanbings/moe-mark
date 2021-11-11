@@ -119,4 +119,3 @@ gradle.properties
 
 # logs directory
 logs/
-server.properties
