@@ -21,16 +21,15 @@ import io.hanbings.moemark.service.LoggerService;
 
 public class Server {
     public static void main(String[] args) {
-        LoggerService.info("""
-                   
-                   _____                   _____                __             \s
-                  /     \\   ____   ____   /     \\ _____ _______|  | __       \s
-                 /  \\ /  \\ /  _ \\_/ __ \\ /  \\ /  \\\\__  \\\\_  __ \\  |/ /
-                /    Y    (  <_> )  ___//    Y    \\/ __ \\|  | \\/    <       \s
-                \\____|__  /\\____/ \\___  >____|__  (____  /__|  |__|_ \\     \s
-                        \\/            \\/        \\/     \\/           \\/    \s
-                         MoeFurry Community MoeMark love VertX.                \s
-                            hanbings hanbings@hanbings.io                      \s""");
+        LoggerService.info("\n" +
+                "   _____                   _____                __              \n" +
+                "  /     \\   ____   ____   /     \\ _____ _______|  | __        \n" +
+                " /  \\ /  \\ /  _ \\_/ __ \\ /  \\ /  \\\\__  \\\\_  __ \\  |/ /\n" +
+                "/    Y    (  <_> )  ___//    Y    \\/ __ \\|  | \\/    <        \n" +
+                "\\____|__  /\\____/ \\___  >____|__  (____  /__|  |__|_ \\      \n" +
+                "        \\/            \\/        \\/     \\/           \\/     \n" +
+                "         MoeFurry Community MoeMark love VertX.                 \n" +
+                "            hanbings hanbings@hanbings.io                         ");
         ServerController serverController = new ServerController();
         serverController.runServer();
     }
