@@ -16,6 +16,9 @@
 
     <!-- 内联 js css -->
     <script type="text/javascript">
+        // 这个 file 对象搞不懂哪里出问题了 getElementById 获取不到 先共享变量解决下吧
+        var picture = null;
+
         function select() {
             document.getElementById('picture').click();
         }
@@ -25,7 +28,7 @@
             var view = document.getElementById('picture-view');
             view.innerHTML = '';
             // 获取图片文件
-            var picture = obj.files[0];
+            picture = obj.files[0];
             // 获取图片 Url 
             window.URL = window.URL || window.webkitURL;
             var img = document.createElement("img");
@@ -46,6 +49,36 @@
                 + '<input id="picture" type="file" style="display: none;" onchange="display(this);" '
                 + 'accept="image/jpeg,image/png,image/webp">'
             select();
+        }
+
+        function upload() {
+            if (picture === null) {
+                alert('是不是没选图片? (*｀へ´*)');
+                return;
+            }
+            // 检查图片大小
+            if (picture.size > 10485760) {
+                alert('选择的图片太大了 只支持最大 10 MB 的图片 (*｀へ´*)');
+                return;
+            }
+            // 检查文件格式
+            if (!/\.(png|jpg|jpeg|webp)$/.test(picture.name)) {
+                alert('只能选 PNG JPG JPEG WEBP  (ｏ・_・)ノ”(ノ_＜。) ');
+                return;
+            }
+            // 发送
+            var data = new FormData();
+            data.append("", picture);
+
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    console.log(this.responseText);
+                }
+            });
+            xhr.open("POST", "https://watermark.moefurry.com/api/v1/extract");
+            xhr.send(data);
         }
     </script>
 
@@ -88,7 +121,7 @@
                     accept="image/jpeg,image/png,image/webp">
             </div>
         </div>
-        <div class="text-input-box" id="text-input-box">
+        <div class="text-input-box" id="text-input-box" onclick="upload();">
             <a class="btn waves-effect waves-light red">
                 <i class="material-icons left">send</i>提取水印</a>
         </div>
