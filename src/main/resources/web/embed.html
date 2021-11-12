@@ -14,6 +14,40 @@
     <!-- import js -->
     <script type="text/javascript" src="./js/materialize.min.js"></script>
 
+    <!-- 内联 js css -->
+    <script type="text/javascript">
+        function select() {
+            document.getElementById('picture').click();
+        }
+
+        function display(obj) {
+            // 清空展示窗口
+            var view = document.getElementById('picture-view');
+            view.innerHTML = '';
+            // 获取图片文件
+            var picture = obj.files[0];
+            // 获取图片 Url 
+            window.URL = window.URL || window.webkitURL;
+            var img = document.createElement("img");
+            img.src = window.URL.createObjectURL(picture);
+            img.height = 210;
+            img.setAttribute("onclick", "reset();")
+            img.onload = function (e) {
+                window.URL.revokeObjectURL(this.src);
+            }
+            // 放置到展示窗口
+            view.appendChild(img);
+        }
+
+        function reset() {
+            var view = document.getElementById('picture-view');
+            view.innerHTML = '<a class="btn waves-effect waves-light green" onclick="select();">'
+                + '<i class="material-icons left">cloud_upload</i>选择图片</a>'
+                + '<input id="picture" type="file" style="display: none;" onchange="display(this);" '
+                + 'accept="image/jpeg,image/png,image/webp">'
+            select();
+        }
+    </script>
 
     <style type="text/css">
         * {
@@ -46,22 +80,20 @@
         <h5 class="header white-text">
             添加盲水印
         </h5>
-        <div class="picture-box">
-            <div class="picture glassmorphism">
-                <div class="file-field input-field">
-                    <div class="btn waves-effect waves-light blue">
-                        <span><i class="material-icons left">cloud_upload</i>选择图片</span>
-                        <input id="picture" type="file">
-                    </div>
-                </div>
+        <div class="picture-box" id="picture-box">
+            <div class="select-picture-box glassmorphism" id="picture-view">
+                <a class="btn waves-effect waves-light green" onclick="select();">
+                    <i class="material-icons left">cloud_upload</i>选择图片</a>
+                <input id="picture" type="file" style="display: none;" onchange="display(this);"
+                    accept="image/jpeg,image/png,image/webp">
             </div>
         </div>
-        <div class="text-input-box">
+        <div class="text-input-box" id="text-input-box">
             <div class="input-field">
                 <input id="watermark-text" type="text" class="validate">
                 <label for="watermark-text">水印 暂只支持数字字母</label>
             </div>
-            <a id="upload" class="btn waves-effect waves-light blue">
+            <a class="btn waves-effect waves-light green">
                 <i class="material-icons left">send</i>添加水印</a>
         </div>
     </main>

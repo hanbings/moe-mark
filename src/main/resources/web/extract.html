@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MoeMark - 提取水印</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- import css -->
+    <link href="./css/materialize.min.css" rel="stylesheet" />
+    <link href="./css/custom-page.css" rel="stylesheet" />
+    <!-- import Google Font and Google Material ICON -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <!-- import js -->
+    <script type="text/javascript" src="./js/materialize.min.js"></script>
+
+    <!-- 内联 js css -->
+    <script type="text/javascript">
+        function select() {
+            document.getElementById('picture').click();
+        }
+
+        function display(obj) {
+            // 清空展示窗口
+            var view = document.getElementById('picture-view');
+            view.innerHTML = '';
+            // 获取图片文件
+            var picture = obj.files[0];
+            // 获取图片 Url 
+            window.URL = window.URL || window.webkitURL;
+            var img = document.createElement("img");
+            img.src = window.URL.createObjectURL(picture);
+            img.height = 210;
+            img.setAttribute("onclick", "reset();")
+            img.onload = function (e) {
+                window.URL.revokeObjectURL(this.src);
+            }
+            // 放置到展示窗口
+            view.appendChild(img);
+        }
+
+        function reset() {
+            var view = document.getElementById('picture-view');
+            view.innerHTML = '<a class="btn waves-effect waves-light red" onclick="select();">'
+                + '<i class="material-icons left">cloud_upload</i>选择图片</a>'
+                + '<input id="picture" type="file" style="display: none;" onchange="display(this);" '
+                + 'accept="image/jpeg,image/png,image/webp">'
+            select();
+        }
+    </script>
+
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /*去掉页面样式，通用选择器*/
+
+        body {
+            /*color: white*/
+            background: url("https://picture.hanbings.com/2021/08/17/a6535c34e55c3.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .footer {
+            width: 100%;
+            height: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="main-page">
+        <h5 class="header white-text">
+            提取盲水印
+        </h5>
+        <div class="picture-box" id="picture-box">
+            <div class="select-picture-box glassmorphism" id="picture-view">
+                <a class="btn waves-effect waves-light red" onclick="select();">
+                    <i class="material-icons left">cloud_upload</i>选择图片</a>
+                <input id="picture" type="file" style="display: none;" onchange="display(this);"
+                    accept="image/jpeg,image/png,image/webp">
+            </div>
+        </div>
+        <div class="text-input-box" id="text-input-box">
+            <a class="btn waves-effect waves-light red">
+                <i class="material-icons left">send</i>提取水印</a>
+        </div>
+    </main>
+    <footer class="footer">
+        Copyright &copy; 2021
+        <a href="https://github.com/Hanbings/MoeMark">
+            MoeFurry MoeMark Project
+        </a> | 背景图片来源于
+        <a href="https://twitter.com/RadyWolf">
+            Twitter RadyWolf
+        </a> 侵权请联系
+        <a href="mailto:hanbings@hanbings.io">
+            hanbings@hanbings.io
+        </a>
+    </footer>
+</body>

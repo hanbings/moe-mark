@@ -15,6 +15,18 @@
     <script type="text/javascript" src="./js/materialize.min.js"></script>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 更进一步 只弹出一次 写入 localStorage
+            if (localStorage.accept != "true") {
+                var elems = document.getElementById('protocol');
+                var instances = M.Modal.init(elems);
+                instances.open();
+                localStorage.accept = "true";
+            }
+        });
+    </script>
+
     <style type="text/css">
         * {
             margin: 0;
@@ -52,14 +64,35 @@
         <div class="button-box">
             <a href="./embed.html" id="embed" class="btn waves-effect waves-light blue"
                 style="margin-left: 3px; margin-right: 3px;">
-                <i class="material-icons left">send</i>开始使用</a>
+                <i class="material-icons left">color_lens</i>开始使用</a>
             <a href="./extract.html" id="extract" class="btn waves-effect waves-light blue"
                 style="margin-left: 3px; margin-right: 3px;">
-                <i class="material-icons left">send</i>提取水印</a>
+                <i class="material-icons left">colorize</i>提取水印</a>
             <a href="https://github.com/Hanbings/MoeMark" id="github" class="btn waves-effect waves-light blue"
                 style="margin-left: 3px; margin-right: 3px;">
-                <i class="material-icons left">send</i>Github</a>
+                <i class="material-icons left">code</i>Github</a>
         </div>
+
+        <div id="protocol" class="modal">
+            <div class="modal-content">
+                <h4>欢迎使用</h4>
+                <p><b>请阅读以下内容</b></p>
+                <p><i>* 我们 指萌兽社区及其提供的服务</i></p>
+                <p><i>* 您 指使用萌兽社区提供的服务的用户</i></p>
+                <p><b>1. 禁止上传违反中国大陆法律以及当地法律的图像</b></p>
+                <p><b>2. 禁止第三方将我们的服务用于商业用途</b></p>
+                <p><b>3. 我们有权对您终止我们的服务</b></p>
+                <p><b>4. 我们不会在您的本地存储 cookies 信息</b></p>
+                <p><b>5. 图片上传后将在服务器内保留 24 小时 24小时后将从我们的服务器中彻底删除
+                        我们不会将您上传的图片用于除了我们提供的服务外的任意行为</b></p>
+                <p><b>6. 我们将服务端以及这个网页进行了开源 欢迎贡献</b></p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat blue white-text">
+                    <i class="material-icons left">check</i>我已知晓</a>
+            </div>
+        </div>
+
     </main>
     <footer class="footer">
         Copyright &copy; 2021
