@@ -18,22 +18,81 @@ package io.hanbings.moemark.service;
 
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
+import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.BasicSessionCredentials;
 import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.exception.CosClientException;
+import com.qcloud.cos.exception.CosServiceException;
+import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.model.PutObjectResult;
+import com.qcloud.cos.model.ciModel.persistence.CIObject;
+import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
+import com.qcloud.cos.model.ciModel.persistence.PicOperations;
 import com.qcloud.cos.region.Region;
 
-public class TencentCosService implements Runnable{
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+
+public class TencentCosService implements Runnable {
     COSClient client;
     COSCredentials credentials;
     Region region;
     ClientConfig config;
 
-    private TencentCosService() {}
+    private TencentCosService() {
+    }
 
-    public TencentCosService(String appId, String secretId, String secretKey, String region) {
-        this.credentials = new BasicSessionCredentials(appId, secretId, secretKey);
+    public TencentCosService(String secretId, String secretKey, String region) {
+        this.credentials = new BasicCOSCredentials(secretId, secretKey);
         this.region = new Region(region);
         this.config = new ClientConfig(this.region);
+    }
+
+    public void embed(String bucket, String path, String name, String text, File file) {
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, path, file);
+        PicOperations picOperations = new PicOperations();
+        picOperations.setIsPicInfo(0);
+        List<PicOperations.Rule> ruleList = new LinkedList<>();
+        PicOperations.Rule rule = new PicOperations.Rule();
+        rule.setBucket(bucket);
+        rule.setFileId(name);
+        rule.setRule("watermark/3/type/3/text/" + text);
+        ruleList.add(rule);
+        picOperations.setRules(ruleList);
+        putObjectRequest.setPicOperations(picOperations);
+        try {
+            client.putObject(putObjectRequest);
+        } catch (CosClientException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void extract(String bucket, String path, String name, File file) {
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, path, file);
+        PicOperations picOperations = new PicOperations();
+        picOperations.setIsPicInfo(0);
+        List<PicOperations.Rule> ruleList = new LinkedList<>();
+        PicOperations.Rule rule = new PicOperations.Rule();
+        rule.setBucket(bucket);
+        rule.setFileId(name);
+        rule.setRule("watermark/4/type/3");
+        ruleList.add(rule);
+        picOperations.setRules(ruleList);
+        putObjectRequest.setPicOperations(picOperations);
+        try {
+            client.putObject(putObjectRequest);
+        } catch (CosClientException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void download(String bucket, String path, String save) {
+
+    }
+
+    public boolean check(String bucket, String path) {
+        return false;
     }
 
     @Override

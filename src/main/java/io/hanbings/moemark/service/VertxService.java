@@ -62,6 +62,7 @@ public class VertxService implements Runnable{
         allowedHeaders.add("X-PINGARUNER");
         allowedMethods.add(HttpMethod.GET);
         allowedMethods.add(HttpMethod.POST);
+        allowedMethods.add(HttpMethod.OPTIONS);
         // 设置默认为允许所有域
         router.route().handler(CorsHandler.create("*").allowedHeaders(allowedHeaders).allowedMethods(allowedMethods));
     }
@@ -82,7 +83,7 @@ public class VertxService implements Runnable{
     }
 
     public void addFileUploadRoute(HttpMethod method, String path, Handler<RoutingContext> handler) {
-        this.router.route(method, path).handler(BodyHandler.create().setUploadsDirectory("temp").setDeleteUploadedFilesOnEnd(true)).handler(handler);
+        this.router.route(method, path).handler(BodyHandler.create().setUploadsDirectory("temp")).handler(handler);
     }
 
     public void delRoute(String path) {

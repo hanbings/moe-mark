@@ -48,8 +48,7 @@ public class ServerController {
 
         // 获取腾讯云 COS 实例
         LoggerService.info("Tencent COS Client Loading...");
-        this.cosService = new TencentCosService(configService.get("app_id"),
-                configService.get("secret_id"),
+        this.cosService = new TencentCosService(configService.get("secret_id"),
                 configService.get("secret_key"),
                 configService.get("region"));
         this.threadService.execute(new Thread(this.cosService::run));

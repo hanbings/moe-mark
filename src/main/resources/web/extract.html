@@ -62,7 +62,7 @@
                 return;
             }
             // 检查文件格式
-            if (!/\.(png|jpg|jpeg|webp)$/.test(picture.name)) {
+            if (!/\.(png|jpg|jpeg|webp)$/.test(picture.name.toLowerCase())) {
                 alert('只能选 PNG JPG JPEG WEBP  (ｏ・_・)ノ”(ノ_＜。) ');
                 return;
             }
@@ -77,7 +77,7 @@
                     console.log(this.responseText);
                 }
             });
-            xhr.open("POST", "https://watermark.moefurry.com/api/v1/extract");
+            xhr.open("POST", "http://127.0.0.1:10086/api/v1/extract");
             xhr.send(data);
         }
     </script>
