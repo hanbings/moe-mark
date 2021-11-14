@@ -18,11 +18,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // 更进一步 只弹出一次 写入 localStorage
-            if (localStorage.accept != "true") {
+            if (localStorage.accept != "v1") {
                 var elems = document.getElementById('protocol');
                 var instances = M.Modal.init(elems);
                 instances.open();
-                localStorage.accept = "true";
+                localStorage.accept = "v1";
             }
         });
     </script>

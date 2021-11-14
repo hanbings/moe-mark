@@ -224,7 +224,7 @@ public class RouteController {
                     return;
                 }
                 // 下载前需要请求一次是否存在
-                if (!cosService.check(configService.get("bucket"),
+                if (cosService.nonexistent(configService.get("bucket"),
                         "picture/" + event.request().params().get("file"))) {
                     LoggerService.info("host " + event.request().host() +
                             " error resource not found.");
@@ -232,13 +232,16 @@ public class RouteController {
                     return;
                 }
                 // 需要先从腾讯云下载
-                cosService.download(configService.get("bucket"),
-                        "picture/" + event.request().params().get("file"),
-                        "./picture/" + event.request().params().get("file"));
-                event.response().sendFile("./picture/" + event.request().params().get("file"));
-                LoggerService.info("host " + event.request().host() +
-                        " get file " + "./picture/" + event.request().params().get("file"));
-
+                threadService.execute(new Thread(() -> {
+                    cosService.download(configService.get("bucket"),
+                            "picture/" + event.request().params().get("file"),
+                            "./picture/" + event.request().params().get("file"));
+                    event.response().sendFile("./picture/" + event.request().params().get("file"));
+                    if (new File("./picture/" + event.request().params().get("file")).delete()) {
+                        LoggerService.info("host " + event.request().host() +
+                                " get file " + "./picture/" + event.request().params().get("file"));
+                    }
+                }));
             }
         });
         // GET /api/v1/watermark 获取水印
@@ -252,7 +255,7 @@ public class RouteController {
                     return;
                 }
                 // 下载前需要请求一次是否存在
-                if (!cosService.check(configService.get("bucket"),
+                if (cosService.nonexistent(configService.get("bucket"),
                         "watermark/" + event.request().params().get("file"))) {
                     LoggerService.info("host " + event.request().host() +
                             " error resource not found.");
@@ -260,13 +263,19 @@ public class RouteController {
                     return;
                 }
                 // 需要先从腾讯云下载
-                cosService.download(configService.get("bucket"),
-                        "watermark/" + event.request().params().get("file"),
-                        "./watermark/" + event.request().params().get("file"));
-                event.response().sendFile("./watermark/" + event.request().params().get("file"));
-                LoggerService.info("host " + event.request().host() +
-                        " get file " + "./watermark/" + event.request().params().get("file"));
-
+                threadService.execute(new Thread() {
+                    @Override
+                    public void run() {
+                        cosService.download(configService.get("bucket"),
+                                "watermark/" + event.request().params().get("file"),
+                                "./watermark/" + event.request().params().get("file"));
+                        event.response().sendFile("./watermark/" + event.request().params().get("file"));
+                        if (new File("./watermark/" + event.request().params().get("file")).delete()) {
+                            LoggerService.info("host " + event.request().host() +
+                                    " get file " + "./watermark/" + event.request().params().get("file"));
+                        }
+                    }
+                });
             }
         });
     }

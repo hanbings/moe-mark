@@ -19,14 +19,10 @@ package io.hanbings.moemark.service;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
-import com.qcloud.cos.auth.BasicSessionCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.exception.CosClientException;
-import com.qcloud.cos.exception.CosServiceException;
+import com.qcloud.cos.model.GetObjectRequest;
 import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.model.PutObjectResult;
-import com.qcloud.cos.model.ciModel.persistence.CIObject;
-import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
 import com.qcloud.cos.model.ciModel.persistence.PicOperations;
 import com.qcloud.cos.region.Region;
 
@@ -88,11 +84,13 @@ public class TencentCosService implements Runnable {
     }
 
     public void download(String bucket, String path, String save) {
-
+        File file = new File(save);
+        GetObjectRequest getObjectRequest = new GetObjectRequest(bucket, path);
+        client.getObject(getObjectRequest, file);
     }
 
-    public boolean check(String bucket, String path) {
-        return false;
+    public boolean nonexistent(String bucket, String path) {
+        return (!client.doesBucketExist(bucket)) && (client.getObjectMetadata(bucket, path) == null);
     }
 
     @Override
