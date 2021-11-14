@@ -81,10 +81,13 @@
             xhr.withCredentials = true;
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    console.log(this.responseText);
+                    setTimeout(() => {
+                        var json = JSON.parse(this.responseText);
+                        window.open("http://watermark.moefurry.com/api/v1/picture?file=" + json.file);
+                    }, 1000)
                 }
             });
-            xhr.open("POST", "http://127.0.0.1:10086/api/v1/embed?text=" + window.btoa(text));
+            xhr.open("POST", "http://watermark.moefurry.com/api/v1/embed?text=" + window.btoa(text));
             xhr.send(data);
         }
     </script>
