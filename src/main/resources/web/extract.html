@@ -76,11 +76,11 @@
                 if (this.readyState === 4) {
                     setTimeout(() => {
                         var json = JSON.parse(this.responseText);
-                        window.open("http://watermark.moefurry.com/api/v1/watermark?file=" + json.file);
+                        window.open("https://watermark.moefurry.com/api/v1/watermark?file=" + json.file);
                     }, 1000)
                 }
             });
-            xhr.open("POST", "http://watermark.moefurry.com/api/v1/extract");
+            xhr.open("POST", "https://watermark.moefurry.com/api/v1/extract");
             xhr.send(data);
         }
     </script>

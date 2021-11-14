@@ -17,25 +17,15 @@
 package io.hanbings.moemark.controller;
 
 import io.hanbings.cynops.security.ShaUtils;
-import io.hanbings.moemark.Server;
 import io.hanbings.moemark.service.*;
 import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.buffer.impl.BufferImpl;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServerFileUpload;
-import io.vertx.core.impl.VertxThread;
 import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -59,7 +49,9 @@ public class RouteController {
 
     public void loadApi() {
         // GET /* 匹配全目录文件
-        vertxService.addSimpleRoute(HttpMethod.GET, "/*", StaticHandler.create("web"));
+        if (Boolean.parseBoolean(configService.get("integrated_server"))) {
+            vertxService.addSimpleRoute(HttpMethod.GET, "/*", StaticHandler.create("web"));
+        }
         // POST /api/v1/embed 添加盲水印
         vertxService.addFileUploadRoute(HttpMethod.POST, "/api/v1/embed", new Handler<RoutingContext>() {
             @Override

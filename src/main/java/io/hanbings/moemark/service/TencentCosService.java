@@ -36,9 +36,6 @@ public class TencentCosService implements Runnable {
     Region region;
     ClientConfig config;
 
-    private TencentCosService() {
-    }
-
     public TencentCosService(String secretId, String secretKey, String region) {
         this.credentials = new BasicCOSCredentials(secretId, secretKey);
         this.region = new Region(region);

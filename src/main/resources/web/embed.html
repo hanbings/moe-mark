@@ -83,11 +83,11 @@
                 if (this.readyState === 4) {
                     setTimeout(() => {
                         var json = JSON.parse(this.responseText);
-                        window.open("http://watermark.moefurry.com/api/v1/picture?file=" + json.file);
+                        window.open("https://watermark.moefurry.com/api/v1/picture?file=" + json.file);
                     }, 1000)
                 }
             });
-            xhr.open("POST", "http://watermark.moefurry.com/api/v1/embed?text=" + window.btoa(text));
+            xhr.open("POST", "https://watermark.moefurry.com/api/v1/embed?text=" + window.btoa(text));
             xhr.send(data);
         }
     </script>
